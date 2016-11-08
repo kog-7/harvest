@@ -1,0 +1,25 @@
+{
+    "name": "gulp-jspool",
+    "version": "1.5.8",
+    "description": "a easy way to pack javascript components",
+    "main": "index.js",
+    "dependencies": {
+        "gulp-util": "^3.0.7",
+        "through2": "^2.0.1"
+    },
+    "devDependencies": {
+        "gulp": "^3.9.1"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "js component",
+        "pack js",
+        "js plugin"
+    ],
+    "author": {
+        "name": "kog-7"
+    },
+    "license": "ISC"
+}
