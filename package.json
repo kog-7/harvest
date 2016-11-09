@@ -1,6 +1,6 @@
 {
     "name": "gulp-jspool",
-    "version": "1.5.8",
+    "version": "1.6.2",
     "description": "a easy way to pack javascript components",
     "main": "index.js",
     "dependencies": {
@@ -12,6 +12,10 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kog-7/gulp-jspool.git"
     },
     "keywords": [
         "js component",

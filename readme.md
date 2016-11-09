@@ -11,7 +11,7 @@ npm install gulp-jspool
 ## Features
   * use config.json to pack
   * control flow with ? ?
-  * scope to divide data environment
+  * use scope as one name to divide data environment
   * @include
   * copy/paste
   * filters
@@ -103,7 +103,7 @@ gulp.tast("example", function() {
 ```js 
 '@include(js/event.js)'
 //if want diff data environment for other js
-{{scope ?size|handRect,handColor?}}
+{{scope canvas as ?size|handRect,handColor?}}
     '@include(js/canvas.js)'
 {{/scope}}
 
@@ -167,9 +167,11 @@ gulp.tast("example", function() {
     {{/if}}
 {{/if}}
 
-//use scope,p.js will use ?pData? value
-{{scope ?pData?}}
-'@include(js/p.js)'
+//use scope,  pic.js will use the valueof ?pic?,for example:
+//?pData? is equal to {x:66,y:2},in pic.js,can use ?pic.x? to get 66;
+//?pData? is equal to 6 ,in pic.js ,can use ?pic? to get 6
+{{scope pic as ?pData?}}
+'@include(js/pic.js)'
 {{/scope}}
 
 ```
@@ -177,6 +179,7 @@ gulp.tast("example", function() {
 ## filter
 ```js 
 //in your filter.js file
+//built-in filter is upper (upperCase string),lower (lowerCase string),length (length of array)
 module.exports={
 toPx:function(variableValue,item,length){
 //variableValue is the value of ?..?,
@@ -184,8 +187,16 @@ toPx:function(variableValue,item,length){
 //if use for loop,item will be the no of loop item,length is the length of loop length;
 }
 };
-
+//tips:if you use filter to handle variableValue of type object in ??,
+//after you change this object attr,value, the change will exists in other situation;
+//for example: ?ob1|filter1?  the value of ob1 is {x:1,y:1},and filter1 is function(variableValue){variableValue.z=3;return variableValue;} 
+//then you use ?ob1? after  the previous operation,the value of ob1 will be {x:1,y:1,z:3}.
+//so in filter1 ,use function(variableValue){
+//var ob=copy(variableValue);//copy is your copy object function;  
+//ob.z=3;return ob;} 
+//is better which you don't want to change the original data;
 ```
+
 ##api
 ```js 
 gulp.src("./config.json").pipe(jspool({
@@ -199,6 +210,9 @@ name:"somename"//optional,this name will cover the name attr of config.json
 ## process
 
 ![tip](http://jspool.oss-cn-hongkong.aliyuncs.com/jspool.png)
+
+## fix
+ * 11-9  fix filter read bug.
 
 
 
