@@ -1,62 +1,92 @@
 /*
  * @Author: jxj
- * @Date:   2016-10-10 15:05:41
+ * @Date:   2016-10-01 17:28:44
  * @Last Modified by:   jxj
- * @Last Modified time: 2016-11-10 13:37:16
+ * @Last Modified time: 2016-11-10 17:14:13
  */
+var path = require("path");
+var main=require("./lib/main.js");
 
-(function (gbl) {
-  if(!gbl){return;}
-    '@include(js/utils.js)'
-    var templateCache = {};
-    var Pocket = function (url, aim) {
-        var privateInfo = {
-            url: url,
-            aim: aim
-        };
-        this.usePrivate = function (attr, val) {
-            if (val !== undefined) {
-                privateInfo[attr] = val; //如果优值
-            } else {
-                return privateInfo[attr];
-            }
-        };
-    };
-    var prototypePocket = {
-        constructor: Pocket
-    };
-    '@include(js/render/extendFilter.js)'
-    miniExtend(prototypePocket, extendFilter);
+var through = require("through2");
+var gutil = require("gulp-util");
+var PluginError = gutil.PluginError;
 
-    '@include(js/render/extendRender.js)'
-    miniExtend(prototypePocket, extendRender);
+const PLUGIN_NAME = "gulp-packjs";
 
-    '@include(js/render/extendMatch.js)'
-    miniExtend(prototypePocket, extendMatch);
+// var prefixStream=function(prefixText) {
+//     var stream = through();
+//     stream.write(prefixText);
+//     return stream;
+// }
 
-    '@include(js/render/extendExpress.js)'
-    miniExtend(prototypePocket, extendExpress);
+// var urlMy = function(url) {
+//     if (url.slice(-1) !== "\/") {
+//         url = url + "\/";
+//     }
+//     return url;
+// }
 
-    '@include(js/render/extendParse.js)'
-    miniExtend(prototypePocket, extendParse);
-
-    '@include(js/render/extendDom.js)'
-    miniExtend(prototypePocket, extendDom);
-
-    '@include(js/render/extendDomLife.js)'
-    miniExtend(prototypePocket, extendDomLife);
-    '@include(js/render/extendUpdate.js)'
-    miniExtend(prototypePocket, extendUpdate);
-    Pocket.prototype = prototypePocket;
-    // gbl.Pocket = Pocket;
-
-    if ( typeof define === "function" && define.amd ) {
-    	define( "pocket", [], function() {
-    		return Pocket;
-    	} );
+function gulpPackjs(opt) {
+    if (["string", "number"].indexOf(typeof opt) !== -1) {
+        this.emit('error', new PluginError(PLUGIN_NAME, 'option has error'));
     }
-    
-    gbl.Pocket = Pocket;
-    
+    if (!opt) {
+        opt = {}
+    }
+    var no = 0;
+    var stream = through.obj(function(ck, enc, cb) {
+        if (ck.isStream()) {
+            this.emit('error', new PluginError(PLUGIN_NAME, 'Streams are not supported!'));
+            return cb();
+        }
+        var pkJs = new main();
+        var configOb, ts = this;
+        var baseDir = ck.base;
+        if (!ck.contents) { //如果有配置文件的话
+            throw new PluginError(PLUGIN_NAME, "no content");
+        }
+        configOb = ck.contents.toString("utf8");
+        //这里configOb不能有注释
 
-})(typeof window !== 'undefined' ? window : null)
+        try {
+            configOb = JSON.parse(configOb);
+        } catch (e) {
+            console.log("error,config.json must be json format")
+            this.emit('error', new PluginError(PLUGIN_NAME, 'config.json write error,not a json'));
+            return cb();
+        }
+
+        var exportFile = opt.name;
+
+        if (!exportFile) { //如果读取不到读文件名字
+            exportFile = configOb.name ? configOb.name + ".js" : path.basename(baseDir) + ".js";
+        } else {
+            exportFile = exportFile + ".js";
+        }
+        //输入到相对路径
+        // baseDir = urlMy(baseDir);
+        ck.path = path.join(baseDir , exportFile);
+        pkJs.export({
+            environment:"gulp",
+            config: baseDir,
+            callback: function(jsStr) {
+              jsStr=new Buffer(jsStr);
+                    ck.contents = Buffer.concat([jsStr]);
+                    ts.push(ck);
+                    cb();
+                    console.log("export "+exportFile+" for handle");
+            },
+            data: opt.data,
+            filter:opt.filter
+        }, configOb);
+    })
+    return stream;
+}
+gulpPackjs.export = function(opt) {
+    var pkJs = new packJs();
+    pkJs.export(opt);
+}
+
+
+
+module.exports = gulpPackjs;
