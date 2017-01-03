@@ -1,3 +1,5 @@
+(function(){
+
 '@include(js/utils.js)'
 
 var namespace=function(gbl,scope){
@@ -40,3 +42,8 @@ namespace(window);
 '@include(js/animate/shape.js)'
 
 '@include(js/app.js)'
+
+
+
+    
+})()

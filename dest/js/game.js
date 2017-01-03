@@ -3,6 +3,8 @@
 
 //game scope 
 
+(function(){
+
 // 根据判断重载手机端或者pc端事件
 // 依赖
 var ifmobile = (function() {
@@ -769,3 +771,8 @@ snow.draw(canv.node().getContext("2d"),30,30,15);
 
 
 },["size","drag","map","shape","createLoop"]);
+
+
+
+    
+})()
