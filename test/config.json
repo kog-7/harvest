@@ -1,0 +1,8 @@
+{
+    "root": {
+        "html": "index.html",
+        "js": "index.js",
+        "less": "index.less"
+    },
+    "export": "dest"
+}
