@@ -1,48 +1,80 @@
 <!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>text module</title>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui" name="viewport">
-      <meta content="yes" name="mobile-web-app-capable">
-      <meta content="yes" name="apple-mobile-web-app-capable">
-      <meta content="black" name="apple-mobile-web-app-status-bar-style">
-      <meta content="true" name="HandheldFriendly">
-      <meta content="portrait" name="screen-orientation">
-      <meta content="yes" name="full-screen">
-      <meta content="application" name="browsermode">
-      <meta content="portrait" name="x5-orientation">
-      <meta content="true" name="x5-fullscreen">
-      <meta content="app" name="x5-page-mode">
-      <meta content="telephone=no, address=no, email=no" name="format-detection">
-    <meta content="no-siteapp" http-equiv="Cache-Control">
-
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui" name="viewport">
+    <meta content="yes" name="mobile-web-app-capable">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="true" name="HandheldFriendly">
+    <meta content="portrait" name="screen-orientation">
+    <meta content="yes" name="full-screen">
+    <meta content="application" name="browsermode">
+    <meta content="portrait" name="x5-orientation">
+    <meta content="true" name="x5-fullscreen">
+    <meta content="app" name="x5-page-mode">
+    <meta content="telephone=no, address=no, email=no" name="format-detection">
+  <meta content="no-siteapp" http-equiv="Cache-Control">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <style>
+    html,body{margin:0px;padding:0px;width:100%;height:100%;}
+    .article,button{
+      position:relative;
+    }
+    .article{
+      position:absolute;
+      left:50%;
+      top:50%;
+    }
+    .canvas{
+      position:absolute;
+      left:0px;
+      top:0px;
+      /*border:1px solid black;*/
+    }
+    .content{
+      width:100%;
+      height:100%;
+      
+    }
+    .btn{
+      display:block; font-weight: 500; text-align: center; touch-action: manipulation; cursor: pointer; background-image: none; border: 1px solid transparent; white-space: nowrap; line-height: 1.5; padding: 4px 15px; font-size: 12px; border-radius: 4px; -webkit-user-select: none; position: relative;
+       color: #666; 
+      background-color: #f7f7f7; border-color: #d9d9d9;
+      
+    }
+    .content-footer{
+      width:100%;
+      position:absolute;
+      left:0px;bottom:30px;
+      
+    }
+    .begin{
+      margin:0 auto;
+      
+    }
+  </style>
 </head>
 <body>
-
-<div id="article">
-<div id="map"></div>    
-<canvas id="game" class="game" width=30 height=30></canvas>
-<div id="cont" style="position:absolute;top:134.3590472889817px;left:247.26276971239855px;z-index: 1000;"></div>
-
-<div id="loop" class="loop">
- <div id="loopContents" class="loop-content">   
-<!-- <div class="loop-content-item">d</div>
-<div class="loop-content-item">a</div>
-<div class="loop-content-item">b</div>
-<div class="loop-content-item">c</div>
-<div class="loop-content-item">d</div>
-<div class="loop-content-item">a</div> -->
-</div>
-</div>
-
-
-</div>
-
-<script src="jslib/d3.min.js"></script>
-<script src="jslib/topojson.js"></script>
-
-<script src="http://192.168.0.103:8000/target/target-script-min.js#anonymous"></script>
+  
+  
+  <div id="article" class="article">
+      <div id="content" class="content">
+        <div class="content-footer">
+        <button class="btn begin" id="begin" type="button"><span>从左到右滑动</span></button>
+        </div>
+      </div>
+      <canvas id="canvas" class="canvas">
+        
+      </canvas>
+      <canvas id="canvasBall" class="canvas">
+        
+      </canvas>
+  </div>
+  
+  
+  <script src="dest/harvest.js"></script>
+  
 </body>
 </html>

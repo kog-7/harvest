@@ -158,3 +158,40 @@ var easeValue = function(opt) { //spring为弹簧系数，aim为目标值，now�
         return true;
     }
 }
+
+
+//判断一个形状是否超过设置的矩形范围，true为在里面，false为超过
+var containsRect=function(ball,bwidth,bheight){
+var x=ball.x,y=ball.y,r=ball.radius,bx=0,by=0;
+return !(x+r<bx||x-r>bx+bwidth||y+r<by||y-r>by+bheight);//一个外面的都不满足，那么就在里面
+}
+
+
+var collisionBallLine=function(ball,line,deg,bounce){
+  var sin=Math.sin(deg),cos=Math.cos(deg);
+  var distanceX=ball.x-line.x,distanceY=ball.y-line.y;
+  var newDistanceX=distanceX*cos+distanceY*sin,newDistanceY=distanceY*cos-distanceX*sin;
+  var newVx=newVy=null;
+  //如下是把所有的线都旋转成水平的方向，都是假设从上面落到线上,
+  if(newDistanceY>-ball.radius&&ball.x<line.x2+line.x&&ball.x>line.x){
+     newVx=ball.vx*cos+ball.vy*sin,newVy=ball.vy*cos-ball.vx*sin;
+     newDistanceY=-ball.radius,newVy*=bounce;
+     distanceX=newDistanceX*cos-newDistanceY*sin,distanceY=newDistanceY*cos+newDistanceX*sin;
+     //更变速度为下一次内容准备
+    ball.vx=newVx*cos-newVy*sin,ball.vy=newVy*cos+newVx*sin;
+    //重置ball的x，y，一般情况下，在递归中，ball.x会自动运行
+    ball.x=line.x+distanceX,ball.y=line.y+distanceY;
+  
+  }
+};
+
+var getRgb=function(r,g,b,t){
+  return "rgba("+r+","+g+","+b+","+t+")";
+}
+
+
+
+
+
+
+

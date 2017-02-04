@@ -1,31 +1,26 @@
-task(function(size,drag,map,shape,createLoop){
+task(function(size,page,game,slider){
+page.layout("article","canvas","canvasBall",size);
+var c2d=$("canvas").getContext("2d");
+var c2d2=$("canvasBall").getContext("2d");
+var width=size.width,height=size.height;
+game.begin(c2d,200,width,height);
+var drawLine=game.drawLine;
+slider(document.body,function(data){
+  var focus=data.focus=drawLine(width,height);
+  var article=$("article");
+  var offsetX=article.offsetLeft,offsetY=article.offsetTop;
+  data.offsetX=offsetX,data.offsetY=offsetY;
+  var startX=data.startX,startY=data.startY;
+  focus.start(startX-offsetX,startY-offsetY);
+},function(data){
+  var focus=data.focus;
+  var offsetX=data.offsetX,offsetY=data.offsetY;
+  var moveX=data.moveX,moveY=data.moveY;
+  focus.draw(c2d2,moveX-offsetX,moveY-offsetY);
+},function(data){
+  var focus=data.focus;
+  data.focus=null;
+  focus.clear(c2d2);
+});
+},["size","page","game","slider"]);
 
-var snow=new shape.snow();
-// console.log(shape);
-
-map(function(mapData,click){
-
-var ob1=mapData[0],ob2=mapData[1],ob3=mapData[9],ob4=mapData[17],ob5=mapData[25],ob6=mapData[30];//临时创建几个数据
-var arr=[ob6,ob1,ob2,ob3,ob4,ob5,ob6,ob1];
-createLoop(arr);
-
-
-drag({container:document.body,callback:function(item){
-
-item=Math.floor(Math.abs(item));
-var dom=$all(".loop-content-item")[item];
-var focus=dom.getAttribute("data-id"),data=mapData[focus];
-var canv=d3.select("#game");
-click();
-click($("path"+focus),$("text"+focus));
-canv.style({left:data.x+"px",top:(data.y+3)+"px",display:"block"});
-snow.draw(canv.node().getContext("2d"),30,30,15);
-
-}});
-
-
-
-})
-
-
-},["size","drag","map","shape","createLoop"]);
